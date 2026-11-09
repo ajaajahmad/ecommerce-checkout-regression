@@ -58,8 +58,8 @@ Run `mvn clean test -Dshopper=problem_user` to reproduce these.
 | Test | What happened |
 |---|---|
 | TC06 | After sorting low to high, the first price is 29.99 where 7.99 is expected |
-| TC07 | The error reads "Last Name is required" even though a last name was entered |
-| TC08 | Checkout never reaches the overview page, so the subtotal cannot be checked |
+| TC07 | Typing "Rao" as the last name leaves that field empty and puts "o" in the first-name field, so the error reads "Last Name is required" |
+| TC08 | The same field bug blocks the form, so checkout never reaches the overview page and the subtotal cannot be checked |
 
 The failures below are expected on that account. They are the suite doing its job.
 
