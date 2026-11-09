@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+	<Properties>
+		<!-- ReportListener reads per-test logs from here, so keep the two in step -->
+		<Property name="logDir">target/test-evidence/logs</Property>
+		<Property name="filePattern">%d{HH:mm:ss.SSS} %-5level %notEmpty{[%X{test}] }%c{1} - %msg%n%throwable</Property>
+	</Properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %notEmpty{[%X{test}] }%msg%n" />
+		</Console>
+
+		<!-- Every line from the run, tagged by test so parallel output can be untangled -->
+		<File name="RunLog" fileName="${logDir}/run.log" append="false">
+			<PatternLayout pattern="${filePattern}" />
+		</File>
+
+		<Null name="Discard" />
+
+		<!-- One file per test, keyed by the "test" value BaseTest puts in the thread context -->
+		<Routing name="PerTestLog">
+			<Routes pattern="$${ctx:test}">
+				<!-- Lines logged outside a test, such as suite start, have no key and stay in run.log only -->
+				<Route key="$${ctx:test}" ref="Discard" />
+				<Route>
+					<File name="test-${ctx:test}" fileName="${logDir}/${ctx:test}.log" append="false">
+						<PatternLayout pattern="${filePattern}" />
+					</File>
+				</Route>
+			</Routes>
+		</Routing>
+	</Appenders>
+
+	<Loggers>
+		<!-- The suite's own debug lines always reach the files; the console shows -Dlog.level and above -->
+		<Logger name="com.quantumqa.checkout" level="debug" />
+
+		<Logger name="org.openqa.selenium" level="warn" />
+
+		<!-- The suite does not use CDP, so a Chrome/CDP version mismatch has no effect on results -->
+		<Logger name="org.openqa.selenium.devtools.CdpVersionFinder" level="error" />
+
+		<Root level="warn">
+			<AppenderRef ref="Console" level="${sys:log.level:-info}" />
+			<AppenderRef ref="RunLog" />
+			<AppenderRef ref="PerTestLog" />
+		</Root>
+	</Loggers>
+</Configuration>

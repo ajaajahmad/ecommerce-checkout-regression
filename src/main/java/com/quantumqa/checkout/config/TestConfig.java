@@ -29,6 +29,11 @@ public final class TestConfig {
 		return Duration.ofSeconds(Long.parseLong(value("wait.seconds")));
 	}
 
+	public static String summary() {
+		return "base.url=%s, shopper=%s, headless=%s, wait=%ss".formatted(baseUrl(), shopper(), headless(),
+				waitTimeout().toSeconds());
+	}
+
 	private static String value(String key) {
 		return System.getProperty(key, PROPERTIES.getProperty(key));
 	}

@@ -2,6 +2,8 @@ package com.quantumqa.checkout.driver;
 
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,6 +12,8 @@ import com.quantumqa.checkout.config.TestConfig;
 
 public final class DriverManager {
 
+	private static final Logger LOG = LogManager.getLogger(DriverManager.class);
+
 	// One browser per test thread, so parallel tests never share a cart or session.
 	private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
@@ -17,7 +21,10 @@ public final class DriverManager {
 	}
 
 	public static void start() {
-		DRIVER.set(new ChromeDriver(chromeOptions()));
+		ChromeDriver driver = new ChromeDriver(chromeOptions());
+		DRIVER.set(driver);
+		LOG.debug("Started Chrome {} (headless={})", driver.getCapabilities().getBrowserVersion(),
+				TestConfig.headless());
 	}
 
 	public static WebDriver driver() {
@@ -29,6 +36,7 @@ public final class DriverManager {
 		if (driver != null) {
 			driver.quit();
 			DRIVER.remove();
+			LOG.debug("Closed the browser");
 		}
 	}
 

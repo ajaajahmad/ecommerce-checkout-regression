@@ -2,6 +2,8 @@ package com.quantumqa.checkout.pages;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -9,6 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.quantumqa.checkout.config.TestConfig;
 
 public class CheckoutCompletePage {
+
+	private static final Logger LOG = LogManager.getLogger(CheckoutCompletePage.class);
 
 	private final By completeHeader = By.cssSelector("[data-test='complete-header']");
 
@@ -19,6 +23,8 @@ public class CheckoutCompletePage {
 	}
 
 	public String confirmationMessage() {
-		return wait.until(visibilityOfElementLocated(completeHeader)).getText();
+		String message = wait.until(visibilityOfElementLocated(completeHeader)).getText();
+		LOG.debug("Confirmation shown: {}", message);
+		return message;
 	}
 }

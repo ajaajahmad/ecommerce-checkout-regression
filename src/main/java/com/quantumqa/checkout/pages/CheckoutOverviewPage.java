@@ -5,6 +5,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElem
 
 import java.math.BigDecimal;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,6 +15,8 @@ import com.quantumqa.checkout.config.TestConfig;
 import com.quantumqa.checkout.utils.Prices;
 
 public class CheckoutOverviewPage {
+
+	private static final Logger LOG = LogManager.getLogger(CheckoutOverviewPage.class);
 
 	private final By subtotalLabel = By.cssSelector("[data-test='subtotal-label']");
 	private final By finishButton = By.cssSelector("[data-test='finish']");
@@ -26,10 +30,13 @@ public class CheckoutOverviewPage {
 	}
 
 	public BigDecimal subtotal() {
-		return Prices.parse(wait.until(visibilityOfElementLocated(subtotalLabel)).getText());
+		BigDecimal subtotal = Prices.parse(wait.until(visibilityOfElementLocated(subtotalLabel)).getText());
+		LOG.debug("Overview subtotal: {}", subtotal);
+		return subtotal;
 	}
 
 	public CheckoutCompletePage finish() {
+		LOG.info("Placing the order");
 		wait.until(elementToBeClickable(finishButton)).click();
 		return new CheckoutCompletePage(driver);
 	}

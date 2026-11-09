@@ -8,7 +8,7 @@ This is an independent demo project. SauceDemo takes no real payments, and nothi
 
 ## Stack
 
-Java 21, Maven 3.9, Selenium 4.52, TestNG 7.12, ExtentReports 5.1 and the Page Object Model. Last verified on Chrome 157 on Linux, on 9 November 2026.
+Java 21, Maven 3.9, Selenium 4.52, TestNG 7.12, ExtentReports 5.1, Log4j 2.26 and the Page Object Model. Last verified on Chrome 157 on Linux, on 9 November 2026.
 
 ## Run it
 
@@ -25,7 +25,24 @@ Useful overrides:
 ```bash
 mvn clean test -Dheadless=false
 mvn clean test -Dshopper=problem_user
+mvn clean test -Dlog.level=warn
 ```
+
+## Logging
+
+Log4j2 writes three outputs, all under `target/test-evidence/logs/`:
+
+| Output | Contents |
+|---|---|
+| Console | Test start and result, plus each user action. `-Dlog.level=warn` reduces it to failures and warnings. |
+| `run.log` | Every line from the run at DEBUG, tagged with its test name so parallel output can be read apart. |
+| `<testName>.log` | One file per test, holding only that test's steps, the values it read from the page, and any stack trace. |
+
+When a test fails, its own log is attached to that test in the Extent report, so the steps leading to the failure sit next to the screenshot.
+
+Page objects log user actions at INFO and the values they read at DEBUG. Click and wait helpers do not log, because a line per click buries the steps that matter. Passwords are never logged.
+
+TestNG's SLF4J output and Selenium's `java.util.logging` output are both routed into Log4j2, so `log4j2.xml` is the single place to change what gets logged.
 
 ## Test cases
 
@@ -91,10 +108,13 @@ A retry or a sleep would have hidden this. The fix was to scope the locator to t
 src/main/java/com/quantumqa/checkout/
   config/      TestConfig: config.properties with -D overrides
   driver/      DriverManager: one Chrome per test thread
-  listeners/   ReportListener: Extent report and failure evidence
+  listeners/   ReportListener: Extent report, result logging and failure evidence
   pages/       One class per screen, with no shared base class
   pages/components/  HeaderComponent: cart link and badge
   utils/       Prices: parses displayed prices into BigDecimal
+src/main/resources/
+  config.properties  Target URL, shopper, headless mode and wait time
+  log4j2.xml         Console, run log and per-test log routing
 src/test/java/com/quantumqa/checkout/
   data/        TestData: demo accounts and fictional shopper
   tests/       Login, Inventory, Cart and Checkout tests
@@ -110,7 +130,7 @@ testng.xml     Suite definition and parallel settings
 - It covers Chrome only, with one shopper and one product in the cart.
 - It depends on a public site that can change or go down without notice. A failure there needs checking against the site before it is treated as a defect.
 - Surefire is pinned to 3.5.x because 3.6 no longer reads TestNG suite XML files.
-- Selenium logs a CDP version warning on Chrome 157. The suite does not use CDP, so it has no effect on results.
+- Selenium warns when Chrome is newer than its bundled CDP support. The suite does not use CDP, so `log4j2.xml` filters that one warning out.
 
 ## What I would add next
 

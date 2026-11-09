@@ -7,6 +7,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElem
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,6 +19,8 @@ import com.quantumqa.checkout.pages.components.HeaderComponent;
 import com.quantumqa.checkout.utils.Prices;
 
 public class CartPage {
+
+	private static final Logger LOG = LogManager.getLogger(CartPage.class);
 
 	private final By cartList = By.cssSelector("[data-test='cart-list']");
 	private final By itemName = By.cssSelector("[data-test='inventory-item-name']");
@@ -36,21 +40,27 @@ public class CartPage {
 
 	public List<String> itemNames() {
 		wait.until(visibilityOfElementLocated(cartList));
-		return driver.findElements(itemName).stream().map(WebElement::getText).toList();
+		List<String> names = driver.findElements(itemName).stream().map(WebElement::getText).toList();
+		LOG.debug("Cart items: {}", names);
+		return names;
 	}
 
 	public List<BigDecimal> itemPrices() {
 		wait.until(visibilityOfElementLocated(cartList));
-		return Prices.parseAll(driver.findElements(itemPrice));
+		List<BigDecimal> prices = Prices.parseAll(driver.findElements(itemPrice));
+		LOG.debug("Cart prices: {}", prices);
+		return prices;
 	}
 
 	public CartPage remove(String productName) {
+		LOG.info("Removing '{}' from the cart", productName);
 		wait.until(elementToBeClickable(By.xpath(cartRowXpath(productName) + "//button"))).click();
 		wait.until(invisibilityOfElementLocated(By.xpath(cartRowXpath(productName))));
 		return this;
 	}
 
 	public CheckoutInformationPage proceedToCheckout() {
+		LOG.info("Proceeding to checkout");
 		wait.until(elementToBeClickable(checkoutButton)).click();
 		return new CheckoutInformationPage(driver);
 	}

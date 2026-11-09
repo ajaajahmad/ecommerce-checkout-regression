@@ -4,6 +4,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClick
 import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +15,8 @@ import com.quantumqa.checkout.config.TestConfig;
 import com.quantumqa.checkout.pages.CartPage;
 
 public class HeaderComponent {
+
+	private static final Logger LOG = LogManager.getLogger(HeaderComponent.class);
 
 	private final By cartLink = By.cssSelector("[data-test='shopping-cart-link']");
 	private final By cartBadge = By.cssSelector("[data-test='shopping-cart-badge']");
@@ -26,18 +30,22 @@ public class HeaderComponent {
 	}
 
 	public String cartBadgeCount() {
-		return wait.until(visibilityOfElementLocated(cartBadge)).getText();
+		String count = wait.until(visibilityOfElementLocated(cartBadge)).getText();
+		LOG.debug("Cart badge shows {}", count);
+		return count;
 	}
 
 	public boolean isCartBadgeAbsent() {
 		try {
 			return wait.until(invisibilityOfElementLocated(cartBadge));
 		} catch (TimeoutException e) {
+			LOG.debug("Cart badge still visible after {}s", TestConfig.waitTimeout().toSeconds());
 			return false;
 		}
 	}
 
 	public CartPage openCart() {
+		LOG.info("Opening the cart");
 		wait.until(elementToBeClickable(cartLink)).click();
 		return new CartPage(driver);
 	}

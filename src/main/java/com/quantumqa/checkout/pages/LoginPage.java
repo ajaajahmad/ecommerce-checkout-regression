@@ -3,6 +3,8 @@ package com.quantumqa.checkout.pages;
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,6 +12,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.quantumqa.checkout.config.TestConfig;
 
 public class LoginPage {
+
+	private static final Logger LOG = LogManager.getLogger(LoginPage.class);
 
 	private final By usernameInput = By.cssSelector("[data-test='username']");
 	private final By passwordInput = By.cssSelector("[data-test='password']");
@@ -25,6 +29,7 @@ public class LoginPage {
 	}
 
 	public LoginPage open() {
+		LOG.info("Opening {}", TestConfig.baseUrl());
 		driver.get(TestConfig.baseUrl());
 		wait.until(visibilityOfElementLocated(loginButton));
 		return this;
@@ -35,13 +40,17 @@ public class LoginPage {
 		return new InventoryPage(driver);
 	}
 
+	// The password is never logged, even for demo accounts, so the habit carries over to real ones.
 	public void submitCredentials(String username, String password) {
+		LOG.info("Signing in as '{}'", username);
 		driver.findElement(usernameInput).sendKeys(username);
 		driver.findElement(passwordInput).sendKeys(password);
 		wait.until(elementToBeClickable(loginButton)).click();
 	}
 
 	public String errorMessage() {
-		return wait.until(visibilityOfElementLocated(errorMessage)).getText();
+		String text = wait.until(visibilityOfElementLocated(errorMessage)).getText();
+		LOG.debug("Login error shown: {}", text);
+		return text;
 	}
 }

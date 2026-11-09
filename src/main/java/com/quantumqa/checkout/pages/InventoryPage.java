@@ -6,6 +6,8 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElem
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
@@ -16,6 +18,8 @@ import com.quantumqa.checkout.pages.components.HeaderComponent;
 import com.quantumqa.checkout.utils.Prices;
 
 public class InventoryPage {
+
+	private static final Logger LOG = LogManager.getLogger(InventoryPage.class);
 
 	private final By inventoryList = By.cssSelector("[data-test='inventory-list']");
 	private final By itemPrice = By.cssSelector("[data-test='inventory-item-price']");
@@ -37,18 +41,22 @@ public class InventoryPage {
 	}
 
 	public InventoryPage addToCart(String productName) {
+		LOG.info("Adding '{}' to the cart", productName);
 		wait.until(elementToBeClickable(addToCartButton(productName))).click();
 		return this;
 	}
 
 	public InventoryPage sortBy(String visibleOption) {
+		LOG.info("Sorting products by '{}'", visibleOption);
 		new Select(wait.until(visibilityOfElementLocated(sortDropdown))).selectByVisibleText(visibleOption);
 		return this;
 	}
 
 	public List<BigDecimal> displayedPrices() {
 		wait.until(visibilityOfElementLocated(inventoryList));
-		return Prices.parseAll(driver.findElements(itemPrice));
+		List<BigDecimal> prices = Prices.parseAll(driver.findElements(itemPrice));
+		LOG.debug("Displayed prices: {}", prices);
+		return prices;
 	}
 
 	// Scoped to the product's own row so the test never depends on its position in the list.
