@@ -1,0 +1,21 @@
+# Maven
+target/
+
+# TestNG
+test-output/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# IntelliJ IDEA
+*.iml
+.idea/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
