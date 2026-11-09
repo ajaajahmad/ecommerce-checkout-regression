@@ -55,8 +55,10 @@ public class CartPage {
 		return new CheckoutInformationPage(driver);
 	}
 
+	// Scoped to the cart list because inventory rows use the same attributes and also show a
+	// Remove button, so an unscoped locator can match the previous page during navigation.
 	private String cartRowXpath(String productName) {
-		return "//div[@data-test='inventory-item'][.//div[@data-test='inventory-item-name'][normalize-space()='"
-				+ productName + "']]";
+		return "//div[@data-test='cart-list']//div[@data-test='inventory-item']"
+				+ "[.//div[@data-test='inventory-item-name'][normalize-space()='" + productName + "']]";
 	}
 }

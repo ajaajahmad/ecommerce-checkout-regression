@@ -46,7 +46,7 @@ A green run only shows that the tests passed, so I also ran the suite in conditi
 
 | Condition | Result | What it shows |
 |---|---|---|
-| `standard_user`, repeated runs | 8 of 8 pass, about 8 seconds | The suite is stable from a clean browser |
+| `standard_user`, repeated headless and visible-browser runs | 8 of 8 pass, about 8 to 11 seconds | The suite is stable from a clean browser in both modes |
 | `performance_glitch_user` | 8 of 8 pass, about 19 seconds | The waits follow the application's state, with no fixed sleeps |
 | `problem_user` | 3 of 8 fail | The suite detects the site's seeded defects (below) |
 | Every expected value changed on purpose | 8 of 8 fail | No assertion passes regardless of behaviour |
@@ -64,6 +64,14 @@ Run `mvn clean test -Dshopper=problem_user` to reproduce these.
 The failures below are expected on that account. They are the suite doing its job.
 
 ![problem_user run: TC06, TC07 and TC08 failing](docs/report-problem-user.png)
+
+## A flaky test I diagnosed
+
+TC05 passed every headless run, including in CI, then failed with `StaleElementReferenceException` when run with a visible browser.
+
+Adding a product gives its inventory row a Remove button, and that row uses the same attributes as a cart row. `CartPage.remove()` could therefore match the inventory page's button just before navigation finished, and the page change then made that element stale.
+
+A retry or a sleep would have hidden this. The fix was to scope the locator to the cart list, so it can only match once the cart is on screen.
 
 ## Testing decisions
 

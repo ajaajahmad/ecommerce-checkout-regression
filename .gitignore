@@ -8,6 +8,7 @@ test-output/
 .project
 .classpath
 .settings/
+.factorypath
 bin/
 
 # IntelliJ IDEA
