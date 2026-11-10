@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.pages;
+package com.ecommerce.checkout.pages;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
@@ -14,9 +14,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.quantumqa.checkout.config.TestConfig;
-import com.quantumqa.checkout.pages.components.HeaderComponent;
-import com.quantumqa.checkout.utils.Prices;
+import com.ecommerce.checkout.config.TestConfig;
+import com.ecommerce.checkout.pages.components.HeaderComponent;
+import com.ecommerce.checkout.utils.Prices;
 
 public class CartPage {
 

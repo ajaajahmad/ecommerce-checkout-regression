@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.listeners;
+package com.ecommerce.checkout.listeners;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,8 +18,8 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-import com.quantumqa.checkout.config.TestConfig;
-import com.quantumqa.checkout.driver.DriverManager;
+import com.ecommerce.checkout.config.TestConfig;
+import com.ecommerce.checkout.driver.DriverManager;
 
 public class ReportListener implements ITestListener {
 

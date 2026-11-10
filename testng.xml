@@ -2,14 +2,14 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Checkout Regression" parallel="methods" thread-count="4">
 	<listeners>
-		<listener class-name="com.quantumqa.checkout.listeners.ReportListener" />
+		<listener class-name="com.ecommerce.checkout.listeners.ReportListener" />
 	</listeners>
 	<test name="Chrome">
 		<classes>
-			<class name="com.quantumqa.checkout.tests.LoginTest" />
-			<class name="com.quantumqa.checkout.tests.InventoryTest" />
-			<class name="com.quantumqa.checkout.tests.CartTest" />
-			<class name="com.quantumqa.checkout.tests.CheckoutTest" />
+			<class name="com.ecommerce.checkout.tests.LoginTest" />
+			<class name="com.ecommerce.checkout.tests.InventoryTest" />
+			<class name="com.ecommerce.checkout.tests.CartTest" />
+			<class name="com.ecommerce.checkout.tests.CheckoutTest" />
 		</classes>
 	</test>
 </suite>

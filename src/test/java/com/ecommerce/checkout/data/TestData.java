@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.data;
+package com.ecommerce.checkout.data;
 
 // Public demo accounts shown on the SauceDemo login page, and a fictional shopper.
 public final class TestData {

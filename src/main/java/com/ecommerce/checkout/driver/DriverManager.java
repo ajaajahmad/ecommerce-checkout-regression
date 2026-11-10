@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.driver;
+package com.ecommerce.checkout.driver;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import com.quantumqa.checkout.config.TestConfig;
+import com.ecommerce.checkout.config.TestConfig;
 
 public final class DriverManager {
 

@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.utils;
+package com.ecommerce.checkout.utils;
 
 import java.math.BigDecimal;
 import java.util.List;

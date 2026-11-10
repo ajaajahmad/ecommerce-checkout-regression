@@ -1,13 +1,13 @@
-package com.quantumqa.checkout.tests;
+package com.ecommerce.checkout.tests;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
-import com.quantumqa.checkout.data.TestData;
-import com.quantumqa.checkout.pages.InventoryPage;
-import com.quantumqa.checkout.pages.LoginPage;
+import com.ecommerce.checkout.data.TestData;
+import com.ecommerce.checkout.pages.InventoryPage;
+import com.ecommerce.checkout.pages.LoginPage;
 
 public class LoginTest extends BaseTest {
 

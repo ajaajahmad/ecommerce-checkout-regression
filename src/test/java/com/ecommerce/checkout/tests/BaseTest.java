@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.tests;
+package com.ecommerce.checkout.tests;
 
 import java.lang.reflect.Method;
 
@@ -7,11 +7,11 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import com.quantumqa.checkout.config.TestConfig;
-import com.quantumqa.checkout.data.TestData;
-import com.quantumqa.checkout.driver.DriverManager;
-import com.quantumqa.checkout.pages.InventoryPage;
-import com.quantumqa.checkout.pages.LoginPage;
+import com.ecommerce.checkout.config.TestConfig;
+import com.ecommerce.checkout.data.TestData;
+import com.ecommerce.checkout.driver.DriverManager;
+import com.ecommerce.checkout.pages.InventoryPage;
+import com.ecommerce.checkout.pages.LoginPage;
 
 public abstract class BaseTest {
 

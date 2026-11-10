@@ -105,7 +105,7 @@ A retry or a sleep would have hidden this. The fix was to scope the locator to t
 ## Structure
 
 ```
-src/main/java/com/quantumqa/checkout/
+src/main/java/com/ecommerce/checkout/
   config/      TestConfig: config.properties with -D overrides
   driver/      DriverManager: one Chrome per test thread
   listeners/   ReportListener: Extent report, result logging and failure evidence
@@ -115,7 +115,7 @@ src/main/java/com/quantumqa/checkout/
 src/main/resources/
   config.properties  Target URL, shopper, headless mode and wait time
   log4j2.xml         Console, run log and per-test log routing
-src/test/java/com/quantumqa/checkout/
+src/test/java/com/ecommerce/checkout/
   data/        TestData: demo accounts and fictional shopper
   tests/       Login, Inventory, Cart and Checkout tests
 testng.xml     Suite definition and parallel settings

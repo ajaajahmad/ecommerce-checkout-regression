@@ -34,7 +34,7 @@
 
 	<Loggers>
 		<!-- The suite's own debug lines always reach the files; the console shows -Dlog.level and above -->
-		<Logger name="com.quantumqa.checkout" level="debug" />
+		<Logger name="com.ecommerce.checkout" level="debug" />
 
 		<Logger name="org.openqa.selenium" level="warn" />
 

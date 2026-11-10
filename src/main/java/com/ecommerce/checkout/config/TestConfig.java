@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.config;
+package com.ecommerce.checkout.config;
 
 import java.io.IOException;
 import java.io.InputStream;

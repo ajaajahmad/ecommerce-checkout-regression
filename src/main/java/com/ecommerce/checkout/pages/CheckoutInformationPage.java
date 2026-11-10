@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.pages;
+package com.ecommerce.checkout.pages;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
@@ -9,7 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.quantumqa.checkout.config.TestConfig;
+import com.ecommerce.checkout.config.TestConfig;
 
 public class CheckoutInformationPage {
 

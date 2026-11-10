@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.tests;
+package com.ecommerce.checkout.tests;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 
 import org.testng.annotations.Test;
 
-import com.quantumqa.checkout.data.TestData;
-import com.quantumqa.checkout.pages.CartPage;
-import com.quantumqa.checkout.pages.CheckoutInformationPage;
-import com.quantumqa.checkout.pages.CheckoutOverviewPage;
+import com.ecommerce.checkout.data.TestData;
+import com.ecommerce.checkout.pages.CartPage;
+import com.ecommerce.checkout.pages.CheckoutInformationPage;
+import com.ecommerce.checkout.pages.CheckoutOverviewPage;
 
 public class CheckoutTest extends BaseTest {
 

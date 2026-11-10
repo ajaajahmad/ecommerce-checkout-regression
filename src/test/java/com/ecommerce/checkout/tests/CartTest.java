@@ -1,4 +1,4 @@
-package com.quantumqa.checkout.tests;
+package com.ecommerce.checkout.tests;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.quantumqa.checkout.data.TestData;
-import com.quantumqa.checkout.pages.CartPage;
-import com.quantumqa.checkout.pages.InventoryPage;
+import com.ecommerce.checkout.data.TestData;
+import com.ecommerce.checkout.pages.CartPage;
+import com.ecommerce.checkout.pages.InventoryPage;
 
 public class CartTest extends BaseTest {
 
