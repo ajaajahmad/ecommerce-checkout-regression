@@ -6,6 +6,8 @@ import java.nio.file.Path;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.FileAppender;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -26,8 +28,8 @@ public class ReportListener implements ITestListener {
 	private static final Logger LOG = LogManager.getLogger(ReportListener.class);
 
 	private static final Path EVIDENCE_DIR = Path.of("target", "test-evidence");
-	// log4j2.xml writes one log per test here, named after the test method.
-	private static final Path TEST_LOG_DIR = EVIDENCE_DIR.resolve("logs");
+	// log4j2.xml writes the run log and one log per test, named after the test method, to this folder.
+	private static final Path RUN_LOG_DIR = runLogDir();
 
 	private final ExtentReports extent = createReport();
 	private final ThreadLocal<ExtentTest> currentTest = new ThreadLocal<>();
@@ -86,6 +88,15 @@ public class ReportListener implements ITestListener {
 	public void onFinish(ITestContext context) {
 		extent.flush();
 		LOG.info("Report: {}", EVIDENCE_DIR.resolve("checkout-report.html").toAbsolutePath());
+		LOG.info("Logs:   {}", RUN_LOG_DIR.toAbsolutePath());
+	}
+
+	// Read from the RunLog appender so the folder name, which includes the run's start time, is set
+	// only in log4j2.xml.
+	private static Path runLogDir() {
+		LoggerContext context = (LoggerContext) LogManager.getContext(false);
+		FileAppender runLog = context.getConfiguration().getAppender("RunLog");
+		return Path.of(runLog.getFileName()).getParent();
 	}
 
 	private static ExtentReports createReport() {
@@ -121,7 +132,7 @@ public class ReportListener implements ITestListener {
 	}
 
 	private static void attachTestLog(ExtentTest test, String testName) {
-		Path log = TEST_LOG_DIR.resolve(testName + ".log");
+		Path log = RUN_LOG_DIR.resolve(testName + ".log");
 		if (!Files.exists(log)) {
 			return;
 		}

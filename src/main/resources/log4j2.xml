@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
 	<Properties>
-		<!-- Outside target/ so mvn clean keeps the history that daily rotation builds up -->
-		<Property name="logDir">logs</Property>
-		<Property name="runLogName">checkout-regression</Property>
-		<!-- ReportListener reads per-test logs from here, so keep the two in step -->
-		<Property name="testLogDir">target/test-evidence/logs</Property>
+		<!-- One folder per run, named by RunLookup with the time the run started. Outside target/ so
+			 mvn clean keeps past runs. ReportListener finds the folder through the RunLog appender,
+			 so this is the only place the path is set. -->
+		<Property name="runDir">logs/${run:started}</Property>
 		<Property name="filePattern">%d{HH:mm:ss.SSS} %-5level %notEmpty{[%X{test}] }%c{1} - %msg%n%throwable</Property>
 	</Properties>
 
@@ -14,21 +13,10 @@
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %notEmpty{[%X{test}] }%msg%n" />
 		</Console>
 
-		<!-- Every line from every run that day, tagged by test so parallel output can be untangled.
-			 The first line logged after midnight moves the file to archive/ under the previous day's date. -->
-		<RollingFile name="RunLog" fileName="${logDir}/${runLogName}.log"
-				filePattern="${logDir}/archive/${runLogName}-%d{yyyy-MM-dd}.log">
+		<!-- Every line from the run, tagged by test so parallel output can be untangled -->
+		<File name="RunLog" fileName="${runDir}/checkout-regression.log">
 			<PatternLayout pattern="${filePattern}" />
-			<Policies>
-				<TimeBasedTriggeringPolicy />
-			</Policies>
-			<DefaultRolloverStrategy>
-				<Delete basePath="${logDir}/archive" maxDepth="1">
-					<IfFileName glob="${runLogName}-*.log" />
-					<IfLastModified age="14d" />
-				</Delete>
-			</DefaultRolloverStrategy>
-		</RollingFile>
+		</File>
 
 		<Null name="Discard" />
 
@@ -38,7 +26,7 @@
 				<!-- Lines logged outside a test, such as suite start, have no key and stay in the run log only -->
 				<Route key="$${ctx:test}" ref="Discard" />
 				<Route>
-					<File name="test-${ctx:test}" fileName="${testLogDir}/${ctx:test}.log" append="false">
+					<File name="test-${ctx:test}" fileName="${runDir}/${ctx:test}.log">
 						<PatternLayout pattern="${filePattern}" />
 					</File>
 				</Route>

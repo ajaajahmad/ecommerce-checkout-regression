@@ -30,17 +30,20 @@ mvn clean test -Dlog.level=warn
 
 ## Logging
 
-Log4j2 writes three outputs:
+Each run writes its logs to its own folder, named after the time the run started:
 
-| Output | Location | Contents |
-|---|---|---|
-| Console | Terminal | Test start and result, plus each user action. `-Dlog.level=warn` reduces it to failures and warnings. |
-| Run log | `logs/checkout-regression.log` | Every line from every run that day at DEBUG, tagged with its test name so parallel output can be read apart. |
-| Per-test logs | `target/test-evidence/logs/<testName>.log` | One file per test from the latest run, holding only that test's steps, the values it read from the page, and any stack trace. |
+```
+logs/2026-11-11_12-14-07/
+  checkout-regression.log      every line from the run at DEBUG, tagged with its test name
+  validLoginOpensInventory.log one file per test: its steps, the values it read and any stack trace
+  ...
+```
 
-The run log rotates daily. The first line logged on a new day moves the previous file to `logs/archive/checkout-regression-<yyyy-MM-dd>.log`, and archives older than 14 days are deleted. `logs/` sits outside `target/` so `mvn clean` keeps that history. Each run starts with a `Running 'Chrome' with ...` line, which marks where it begins.
+The console shows each test's start and result, plus each user action. `-Dlog.level=warn` reduces it to failures and warnings. The last lines of a run print the report and log folder paths.
 
-Per-test logs belong to a single run, so they stay with the report and are replaced on each run. When a test fails, its own log is attached to that test in the Extent report, so the steps leading to the failure sit next to the screenshot.
+`logs/` sits outside `target/`, so `mvn clean` keeps earlier runs for comparison. Delete old run folders by hand when they are no longer needed.
+
+When a test fails, its own log is attached to that test in the Extent report, so the steps leading to the failure sit next to the screenshot.
 
 Page objects log user actions at INFO and the values they read at DEBUG. Click and wait helpers do not log, because a line per click buries the steps that matter. Passwords are never logged.
 
@@ -111,12 +114,13 @@ src/main/java/com/ecommerce/checkout/
   config/      TestConfig: config.properties with -D overrides
   driver/      DriverManager: one Chrome per test thread
   listeners/   ReportListener: Extent report, result logging and failure evidence
+  logging/     RunLookup: gives each run's log folder its start time
   pages/       One class per screen, with no shared base class
   pages/components/  HeaderComponent: cart link and badge
   utils/       Prices: parses displayed prices into BigDecimal
 src/main/resources/
   config.properties  Target URL, shopper, headless mode and wait time
-  log4j2.xml         Console, daily rolling run log and per-test log routing
+  log4j2.xml         Console, run log and per-test log routing into one folder per run
 src/test/java/com/ecommerce/checkout/
   data/        TestData: demo accounts and fictional shopper
   tests/       Login, Inventory, Cart and Checkout tests
