@@ -30,15 +30,17 @@ mvn clean test -Dlog.level=warn
 
 ## Logging
 
-Log4j2 writes three outputs, all under `target/test-evidence/logs/`:
+Log4j2 writes three outputs:
 
-| Output | Contents |
-|---|---|
-| Console | Test start and result, plus each user action. `-Dlog.level=warn` reduces it to failures and warnings. |
-| `run.log` | Every line from the run at DEBUG, tagged with its test name so parallel output can be read apart. |
-| `<testName>.log` | One file per test, holding only that test's steps, the values it read from the page, and any stack trace. |
+| Output | Location | Contents |
+|---|---|---|
+| Console | Terminal | Test start and result, plus each user action. `-Dlog.level=warn` reduces it to failures and warnings. |
+| Run log | `logs/checkout-regression.log` | Every line from every run that day at DEBUG, tagged with its test name so parallel output can be read apart. |
+| Per-test logs | `target/test-evidence/logs/<testName>.log` | One file per test from the latest run, holding only that test's steps, the values it read from the page, and any stack trace. |
 
-When a test fails, its own log is attached to that test in the Extent report, so the steps leading to the failure sit next to the screenshot.
+The run log rotates daily. The first line logged on a new day moves the previous file to `logs/archive/checkout-regression-<yyyy-MM-dd>.log`, and archives older than 14 days are deleted. `logs/` sits outside `target/` so `mvn clean` keeps that history. Each run starts with a `Running 'Chrome' with ...` line, which marks where it begins.
+
+Per-test logs belong to a single run, so they stay with the report and are replaced on each run. When a test fails, its own log is attached to that test in the Extent report, so the steps leading to the failure sit next to the screenshot.
 
 Page objects log user actions at INFO and the values they read at DEBUG. Click and wait helpers do not log, because a line per click buries the steps that matter. Passwords are never logged.
 
@@ -114,7 +116,7 @@ src/main/java/com/ecommerce/checkout/
   utils/       Prices: parses displayed prices into BigDecimal
 src/main/resources/
   config.properties  Target URL, shopper, headless mode and wait time
-  log4j2.xml         Console, run log and per-test log routing
+  log4j2.xml         Console, daily rolling run log and per-test log routing
 src/test/java/com/ecommerce/checkout/
   data/        TestData: demo accounts and fictional shopper
   tests/       Login, Inventory, Cart and Checkout tests

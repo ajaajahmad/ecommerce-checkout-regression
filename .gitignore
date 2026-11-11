@@ -1,6 +1,9 @@
 # Maven
 target/
 
+# Log4j2 run logs
+logs/
+
 # TestNG
 test-output/
 
